@@ -1,0 +1,811 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ─── Fallback defaults (overridden by theme.js) ─── */
+:root {
+  --nav-bg: #faf2dD;
+  --nav-border: #e4dcc0;
+  --nav-text: #1a1a1a;
+  --nav-accent: #ff9140;
+  --nav-accent-hover: #ef7919;
+  --nav-accent-light: #ffc053;
+  --nav-title: #045c32;
+  --nav-hover-bg: #fff8e7;
+}
+
+/* ─── Reset ─── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #184525;
+  background-attachment: fixed;
+  min-height: 200vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Progress Bar ─── */
+#progressBar {
+  position: fixed;
+  bottom: env(safe-area-inset-bottom, 0px);
+  left: 0;
+  height: 5px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--nav-accent), var(--nav-accent-light));
+  transition: width 0.2s ease;
+  z-index: 1001;
+  box-shadow: 0 0 10px var(--nav-accent),
+              0 0 20px var(--nav-accent),
+              0 0 40px var(--nav-accent-light);
+}
+
+#progressIcon {
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+  transform: translateX(50%);
+  width: auto;
+  height: 40px;
+  pointer-events: none;
+}
+
+/* ─── Navbar fixed wrapper ─── */
+.nav-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+/* ─── Nav component (centering) ─── */
+.nav-component {
+  max-width: 84rem;
+  margin: 1.5rem auto 0;
+  padding: 0 1.75rem;
+  position: relative;
+}
+
+/* ─── Floating pill container ─── */
+.nav-container {
+  border: 2px solid var(--nav-border);
+  background: var(--nav-bg);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0.9rem 0.85rem 1.75rem;
+  position: relative;
+  transition: border-radius 0.25s, border-color 0.25s, box-shadow 0.3s;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Brand (logo + title) ─── */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  width: auto;
+  height: 3.5rem;
+  max-width: 6.5rem;
+  object-fit: contain;
+}
+
+.nav-title {
+  color: var(--nav-title);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.45rem;
+  white-space: nowrap;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Menu wrapper ─── */
+.nav-menu-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* ─── Simple nav link ─── */
+.nav-link {
+  font-family: 'Poppins', sans-serif;
+  color: var(--nav-text);
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 0.85rem;
+  padding: 0.9rem 1.35rem;
+  text-decoration: none;
+  line-height: 1.3;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.3s,
+              color 0.3s,
+              border-color 0.3s,
+              box-shadow 0.3s;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background: var(--nav-accent-hover);
+  color: var(--nav-bg);
+  border-color: var(--nav-accent-hover);
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 0 28px rgba(255, 145, 64, 0.45);
+}
+
+/* ─── Dropdown wrapper ─── */
+.nav-dropdown {
+  position: relative;
+}
+
+/* ─── Dropdown toggle ─── */
+.nav-dropdown-toggle {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 0.85rem;
+  padding: 0.9rem 1.35rem;
+  color: var(--nav-text);
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1.3;
+  white-space: nowrap;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.3s,
+              color 0.3s,
+              border-color 0.3s,
+              box-shadow 0.3s;
+}
+
+.nav-dropdown-toggle:hover {
+  background: var(--nav-accent-hover);
+  color: var(--nav-bg);
+  border-color: var(--nav-accent-hover);
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 0 28px rgba(255, 145, 64, 0.45);
+}
+
+.nav-dropdown-arrow {
+  width: 10px;
+  height: 10px;
+  transition: transform 0.3s ease;
+}
+
+.nav-dropdown:hover .nav-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+/* ─── Dropdown bridge ─── */
+.nav-dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: transparent;
+  z-index: 1003;
+}
+
+/* ─── Dropdown menu (iGEM-style: orange bg, cream text) ─── */
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1002;
+  border: 2px solid var(--nav-accent-hover);
+  background: var(--nav-accent-hover);
+  border-radius: 0.85rem;
+  min-width: 14rem;
+  padding: 0.5rem 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav-dropdown-link {
+  font-family: 'Poppins', sans-serif;
+  display: block;
+  padding: 0.7rem 1.5rem;
+  color: var(--nav-bg);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.25s, background-color 0.25s, padding-left 0.25s;
+  white-space: nowrap;
+}
+
+.nav-dropdown-link:hover {
+  background: rgba(0, 0, 0, 0.15);
+  padding-left: 1.9rem;
+}
+
+/* ─── Hamburger ─── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--h-gap, 0.4rem);
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+  --h-thickness: 0.15rem;
+  --h-gap: 0.4rem;
+}
+
+.nav-hamburger-line {
+  display: block;
+  width: 26px;
+  height: var(--h-thickness);
+  background: var(--nav-text);
+  border-radius: 0.1rem;
+  transition: all 0.25s ease;
+}
+
+.nav-hamburger-line:nth-child(2) {
+  width: 65%;
+}
+
+.nav-hamburger-line:nth-child(3) {
+  width: 85%;
+}
+
+.nav-hamburger:hover .nav-hamburger-line:nth-child(2) {
+  width: 80%;
+}
+
+.nav-hamburger:hover .nav-hamburger-line:nth-child(3) {
+  width: 65%;
+}
+
+/* ─── Mobile (≤991px) ─── */
+@media (max-width: 991px) {
+  .nav-component {
+    max-width: none;
+    margin-top: 0.5rem;
+    padding: 0 1.25rem;
+  }
+
+  .nav-container {
+    padding: 0.7rem 1.2rem;
+    border-radius: 0.85rem;
+  }
+
+  .nav-container.menu-open {
+    border-bottom-color: transparent;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .nav-logo {
+    height: 2.75rem;
+    max-width: 5.5rem;
+  }
+
+  .nav-title {
+    font-size: 1.2rem;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-menu-wrapper {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -2px;
+    right: -2px;
+    border: 2px solid var(--nav-border);
+    border-top: none;
+    background: var(--nav-bg);
+    border-radius: 0 0 0.85rem 0.85rem;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 1.2rem 1.2rem;
+    gap: 0;
+    z-index: 1000;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .nav-menu-wrapper.show {
+    display: flex;
+  }
+
+  .nav-link {
+    border: none;
+    border-bottom: 1.5px solid var(--nav-border);
+    border-radius: 0;
+    padding: 0.95rem 0.4rem;
+    font-size: 1.15rem;
+  }
+
+  .nav-link:hover {
+    background: transparent;
+    color: var(--nav-accent);
+    border-color: var(--nav-border);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .nav-dropdown-toggle {
+    border: none;
+    border-bottom: 1.5px solid var(--nav-border);
+    border-radius: 0;
+    padding: 0.95rem 0.4rem;
+    font-size: 1.15rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .nav-dropdown-toggle:hover {
+    background: transparent;
+    color: var(--nav-accent);
+    border-color: var(--nav-border);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .nav-dropdown::after {
+    display: none;
+  }
+
+  .nav-dropdown-arrow {
+    width: 13px;
+    height: 13px;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    border: none;
+    background: var(--nav-bg);
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin-top: 0;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    border-radius: 0;
+    min-width: auto;
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu {
+    opacity: 1;
+    transform: none;
+    max-height: 0;
+  }
+
+  .nav-dropdown.open .nav-dropdown-menu {
+    max-height: 600px;
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  .nav-dropdown.open .nav-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  .nav-dropdown-link {
+    padding: 0.7rem 1.2rem;
+    font-size: 1.05rem;
+    color: var(--nav-text);
+  }
+
+  .nav-dropdown-link:hover {
+    padding-left: 1.6rem;
+    color: var(--nav-accent);
+  }
+}
+
+/* ─── Small mobile ─── */
+@media (max-width: 767px) {
+  .nav-component {
+    margin-top: 0.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .nav-container {
+    padding: 0.6rem 1rem;
+  }
+
+  .nav-logo {
+    height: 2.5rem;
+    max-width: 5rem;
+  }
+
+  .nav-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   POKEMON-STYLE TEAM CARDS
+   ═══════════════════════════════════════════════ */
+
+.cards-page {
+  padding-top: 8rem;
+  padding-bottom: 4rem;
+  max-width: 90rem;
+  margin: 0 auto;
+}
+
+.cards-page-header {
+  text-align: center;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.cards-page-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #faf2dD;
+  margin-bottom: 0.5rem;
+}
+
+.cards-page-header p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: #c5e3aa;
+  font-weight: 400;
+}
+
+/* ─── Card Grid ─── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem 1.5rem;
+  padding: 0 2rem;
+}
+
+/* ─── Card Wrapper ─── */
+.pokecard {
+  perspective: 800px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.35s ease;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.pokecard:hover {
+  box-shadow: 0 0 30px rgba(255, 145, 64, 0.45),
+              0 0 60px rgba(255, 145, 64, 0.2);
+  z-index: 10;
+}
+
+.pokecard:active {
+  transform: scale(0.96);
+  transition: transform 0.1s ease;
+}
+
+/* ─── Card Inner (flip container) ─── */
+.pokecard-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  border-radius: 1rem;
+}
+
+.pokecard.flipped .pokecard-inner {
+  transform: rotateY(180deg);
+}
+
+/* ─── Card Faces ─── */
+.pokecard-back,
+.pokecard-front {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* ─── Card Back (Poke Ball) ─── */
+.pokecard-back {
+  background: linear-gradient(145deg, #2a3eb1, #1e2d8a);
+  border: 3px solid #ffd700;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pokecard-back::before {
+  content: '';
+  position: absolute;
+  inset: 0.5rem;
+  border: 2px dashed rgba(255,215,0,0.25);
+  border-radius: 0.75rem;
+  pointer-events: none;
+}
+
+/* Top red half */
+.pokeball-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(180deg, #ee1515, #cc0000);
+  box-shadow: inset 0 5px 20px rgba(255,255,255,0.15);
+}
+
+/* Center black band */
+.pokeball-band {
+  position: absolute;
+  top: calc(50% - 3%);
+  left: 0;
+  width: 100%;
+  height: 6%;
+  background: linear-gradient(180deg, #111, #333, #111);
+  z-index: 1;
+}
+
+/* Center white circle */
+.pokeball-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(32px, 28%, 52px);
+  height: clamp(32px, 28%, 52px);
+  background: radial-gradient(circle at 40% 40%, #ffffff, #e0e0e0);
+  border: clamp(4px, 4%, 7px) solid #1a1a1a;
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3), inset 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Decorative dots pattern on the bottom half */
+.pokeball-dots {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+  right: 10%;
+  top: 55%;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 12px 12px;
+  pointer-events: none;
+}
+
+/* ─── Card Front ─── */
+.pokecard-front {
+  background: #faf2dD;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  border: 3px solid #e4dcc0;
+}
+
+.card-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-avatar span {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.card-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #045c32;
+  text-align: center;
+}
+
+.card-role {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #ef7919;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-tagline {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #888;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+/* ─── Grid Responsive ─── */
+@media (max-width: 1100px) {
+  .cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem 1.25rem;
+  }
+}
+
+/* iPad landscape & small tablets */
+@media (max-width: 850px) {
+  .cards-page {
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+  }
+
+  .cards-page-header {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem 1rem;
+    padding: 0 1.25rem;
+  }
+
+  .cards-page-header h1 {
+    font-size: 2rem;
+  }
+
+  .cards-page-header p {
+    font-size: 1rem;
+  }
+}
+
+/* iPad portrait & large phones */
+@media (max-width: 650px) {
+  .cards-page {
+    padding-top: 6.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .cards-page-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .pokecard:hover {
+    box-shadow: 0 0 20px rgba(255, 145, 64, 0.35);
+  }
+}
+
+/* iPhones */
+@media (max-width: 550px) {
+  .cards-page {
+    padding-top: 6rem;
+    padding-bottom: 5rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 0.75rem;
+    padding: 0 0.75rem;
+  }
+
+  .cards-page-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .cards-page-header p {
+    font-size: 0.9rem;
+  }
+
+  .card-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .card-avatar span {
+    font-size: 1.25rem;
+  }
+
+  .card-name {
+    font-size: 1rem;
+  }
+
+  .card-role {
+    font-size: 0.75rem;
+  }
+
+  .card-tagline {
+    font-size: 0.7rem;
+  }
+
+  .pokecard-front {
+    padding: 1rem 0.5rem;
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .cards-page {
+    padding-top: 5.5rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .cards-page-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .card-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .card-avatar span {
+    font-size: 1.1rem;
+  }
+
+  .card-name {
+    font-size: 0.9rem;
+  }
+}
+
+/* ─── Touch devices: disable tilt, keep glow ─── */
+@media (hover: none) and (pointer: coarse) {
+  .pokecard:hover {
+    box-shadow: none;
+  }
+
+  .pokecard:active {
+    box-shadow: 0 0 25px rgba(255, 145, 64, 0.4);
+  }
+}
