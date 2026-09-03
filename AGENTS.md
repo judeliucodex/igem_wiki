@@ -22,15 +22,16 @@ window.NAV_BG          // navbar background
 window.NAV_ACCENT      // link hover fill, progress bar
 window.NAV_ACCENT_HOVER // dropdown bg, hover fill
 window.TITLE_COLOR     // logo/title text
-window.PROGRESS_ICONS  // array of 3 image URLs for scroll icon (transparent PNG walk cycle)
-window.PROGRESS_STEP   // px per frame (default 340; higher = slower)
+window.PROGRESS_ICONS    // array of 3 image URLs for scroll icon (transparent PNG walk cycle)
+window.PROGRESS_ADVANCES // frame swaps across a full page scroll (default 50; higher = faster)
+window.PROGRESS_STEP     // fallback px-per-frame, used only when ADVANCES is 0 (default 340)
 ```
 
 CSS uses `var(--nav-bg)`, `var(--nav-accent)`, etc. with hardcoded fallbacks in `:root`. Changing a color means editing `theme.js` — don't edit CSS directly for palette changes.
 
 ## Progress bar behavior
 
-Fixed at viewport bottom (`bottom: 0` with `env(safe-area-inset-bottom)` for notched iPhones). Width grows 0→100% with scroll. A 3-frame image cycles every `PROGRESS_STEP` px of scroll using `Math.floor(scrollY / step) % frames.length`. All frames are preloaded to avoid flicker on swap.
+Fixed at viewport bottom (`bottom: 0` with `env(safe-area-inset-bottom)` for notched iPhones). Width grows 0→100% with scroll. A 3-frame walk cycle advances `PROGRESS_ADVANCES` times over the full scrollable height (`Math.floor(scrollFraction * advances) % frames.length`), so the pace is viewport-independent. If `PROGRESS_ADVANCES` is 0 it falls back to `PROGRESS_STEP` px per frame. All frames are preloaded to avoid flicker on swap. Icon is 88px tall (64px ≤600px wide) — `style.css` `#progressIcon`.
 
 ## Navbar conventions
 

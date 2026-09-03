@@ -110,8 +110,9 @@
       var bar     = document.getElementById('progressBar');
       var icon    = document.getElementById('progressIcon');
       var ticking = false;
-      var frames  = window.PROGRESS_ICONS || [];
-      var step    = window.PROGRESS_STEP || 170;
+      var frames   = window.PROGRESS_ICONS || [];
+      var step     = window.PROGRESS_STEP || 170;
+      var advances = window.PROGRESS_ADVANCES || 0;
 
       frames.forEach(function (src) { var img = new Image(); img.src = src; });
       if (frames.length) { icon.src = frames[0]; icon.dataset.idx = '0'; }
@@ -122,7 +123,10 @@
         var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         bar.style.width = Math.min(pct, 100) + '%';
         if (frames.length) {
-          var idx = Math.floor(scrollTop / step) % frames.length;
+          var stepCount = advances > 0 && docHeight > 0
+            ? Math.floor((scrollTop / docHeight) * advances)
+            : Math.floor(scrollTop / step);
+          var idx = stepCount % frames.length;
           if (icon.dataset.idx !== String(idx)) { icon.src = frames[idx]; icon.dataset.idx = String(idx); }
         }
         ticking = false;

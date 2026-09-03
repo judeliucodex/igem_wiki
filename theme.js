@@ -19,7 +19,8 @@ window.PROGRESS_ICONS = [
   'frog2.png',
   'frog3.png'
 ];
-window.PROGRESS_STEP  = 340;          // scroll pixels before next frame (higher = slower)
+window.PROGRESS_ADVANCES = 50;        // frame swaps across a full page scroll (higher = faster walk)
+window.PROGRESS_STEP     = 340;       // fallback: scroll pixels per frame if ADVANCES is 0
 
 // ════════════════════════════════════════════════
 //  APPLY AS CSS VARIABLES (do not edit below)
