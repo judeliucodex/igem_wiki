@@ -4,13 +4,13 @@
 
 window.APP_TITLE = "HKSSC IGEM";
 
-window.NAV_BG            = "#db84b5";   // navbar background
-window.NAV_BORDER        = "#e4dcc0";   // navbar border (slightly darker than bg)
+window.NAV_BG            = "#f7abf1";   // navbar background
+window.NAV_BORDER        = "#f7abf1";   // navbar border (slightly darker than bg)
 window.NAV_TEXT          = "#ffffff";   // nav link text
-window.NAV_ACCENT        = "#ff9140";   // link hover border, progress bar
-window.NAV_ACCENT_HOVER  = "#ef7919";   // accent hover variant
-window.NAV_ACCENT_LIGHT  = "#ffc053";   // secondary accent
-window.TITLE_COLOR       = "#379139";   // logo / title text
+window.NAV_ACCENT        = "#ffffff";   // link hover border, progress bar
+window.NAV_ACCENT_HOVER  = "#ffffff";   // accent hover variant
+window.NAV_ACCENT_LIGHT  = "#ffffff";   // secondary accent
+window.TITLE_COLOR       = "#ffffff";   // logo / title text
 window.NAV_HOVER_BG      = "#ffffff";   // link / dropdown toggle hover bg
 
 // Progress icon: 3-frame scroll-driven walk cycle (transparent PNGs)
