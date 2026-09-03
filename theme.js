@@ -4,14 +4,14 @@
 
 window.APP_TITLE = "HKSSC IGEM";
 
-window.NAV_BG            = "#faf2dD";   // navbar background
+window.NAV_BG            = "#db84b5";   // navbar background
 window.NAV_BORDER        = "#e4dcc0";   // navbar border (slightly darker than bg)
-window.NAV_TEXT          = "#1a1a1a";   // nav link text
+window.NAV_TEXT          = "#ffffff";   // nav link text
 window.NAV_ACCENT        = "#ff9140";   // link hover border, progress bar
 window.NAV_ACCENT_HOVER  = "#ef7919";   // accent hover variant
 window.NAV_ACCENT_LIGHT  = "#ffc053";   // secondary accent
-window.TITLE_COLOR       = "#045c32";   // logo / title text
-window.NAV_HOVER_BG      = "#fff8e7";   // link / dropdown toggle hover bg
+window.TITLE_COLOR       = "#379139";   // logo / title text
+window.NAV_HOVER_BG      = "#ffffff";   // link / dropdown toggle hover bg
 
 // Progress icon: 4-frame scroll-driven animation
 // TEST IMAGES — replace with your own when ready
