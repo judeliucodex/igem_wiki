@@ -13,15 +13,13 @@ window.NAV_ACCENT_LIGHT  = "#ffc053";   // secondary accent
 window.TITLE_COLOR       = "#379139";   // logo / title text
 window.NAV_HOVER_BG      = "#ffffff";   // link / dropdown toggle hover bg
 
-// Progress icon: 4-frame scroll-driven animation
-// TEST IMAGES — replace with your own when ready
+// Progress icon: 3-frame scroll-driven walk cycle (transparent PNGs)
 window.PROGRESS_ICONS = [
-  'https://placehold.co/48x48/ff9140/faf2dD?text=1',
-  'https://placehold.co/48x48/ef7919/faf2dD?text=2',
-  'https://placehold.co/48x48/ffc053/faf2dD?text=3',
-  'https://placehold.co/48x48/045c32/faf2dD?text=4'
+  'frog1.png',
+  'frog2.png',
+  'frog3.png'
 ];
-window.PROGRESS_STEP  = 170;          // scroll pixels before next frame
+window.PROGRESS_STEP  = 340;          // scroll pixels before next frame (higher = slower)
 
 // ════════════════════════════════════════════════
 //  APPLY AS CSS VARIABLES (do not edit below)

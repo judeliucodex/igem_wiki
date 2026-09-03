@@ -22,15 +22,15 @@ window.NAV_BG          // navbar background
 window.NAV_ACCENT      // link hover fill, progress bar
 window.NAV_ACCENT_HOVER // dropdown bg, hover fill
 window.TITLE_COLOR     // logo/title text
-window.PROGRESS_ICONS  // array of 4 image URLs for scroll icon
-window.PROGRESS_STEP   // px per frame (default 170)
+window.PROGRESS_ICONS  // array of 3 image URLs for scroll icon (transparent PNG walk cycle)
+window.PROGRESS_STEP   // px per frame (default 340; higher = slower)
 ```
 
 CSS uses `var(--nav-bg)`, `var(--nav-accent)`, etc. with hardcoded fallbacks in `:root`. Changing a color means editing `theme.js` — don't edit CSS directly for palette changes.
 
 ## Progress bar behavior
 
-Fixed at viewport bottom (`bottom: 0` with `env(safe-area-inset-bottom)` for notched iPhones). Width grows 0→100% with scroll. A 4-frame image cycles every `PROGRESS_STEP` px of scroll using `Math.floor(scrollY / step) % 4`. All frames are preloaded to avoid flicker on swap.
+Fixed at viewport bottom (`bottom: 0` with `env(safe-area-inset-bottom)` for notched iPhones). Width grows 0→100% with scroll. A 3-frame image cycles every `PROGRESS_STEP` px of scroll using `Math.floor(scrollY / step) % frames.length`. All frames are preloaded to avoid flicker on swap.
 
 ## Navbar conventions
 
