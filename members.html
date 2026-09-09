@@ -6,11 +6,7 @@
   <title>Team Members - iGEM Wiki</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-  <div id="progressBar">
-    <img id="progressIcon" src="" alt="">
-  </div>
+<body class="members-page">
 
   <div class="nav-fixed" id="navbar">
     <div class="nav-component">
@@ -96,45 +92,37 @@
   <main class="cards-page">
     <div class="cards-page-header">
       <h1>Team Members</h1>
-      <p>Click a card to flip it over</p>
     </div>
-    <div class="cards-grid" id="cardsGrid"></div>
+
+    <section class="member-browser" id="memberBrowser" aria-label="Team member card browser">
+      <div class="member-picker-shell">
+        <div class="member-name-list" id="memberNameList" role="tablist" aria-label="Choose a team member"></div>
+      </div>
+
+      <div class="member-carousel">
+        <button class="carousel-nav carousel-nav--previous" id="previousMember" type="button" aria-label="Show previous team member">
+          <span aria-hidden="true">&#8592;</span>
+        </button>
+
+        <div class="cards-grid" id="cardsGrid" aria-live="polite"></div>
+
+        <button class="carousel-nav carousel-nav--next" id="nextMember" type="button" aria-label="Show next team member">
+          <span aria-hidden="true">&#8594;</span>
+        </button>
+      </div>
+
+      <div class="member-carousel-footer">
+        <div class="member-current">
+          <strong id="activeMemberName">Jude</strong>
+          <span id="memberPosition">1 of 22</span>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="theme.js"></script>
   <script>
     document.querySelector('.nav-title').textContent = window.APP_TITLE;
-
-    /* ── progress bar ── */
-    (function () {
-      var bar     = document.getElementById('progressBar');
-      var icon    = document.getElementById('progressIcon');
-      var ticking = false;
-      var frames   = window.PROGRESS_ICONS || [];
-      var step     = window.PROGRESS_STEP || 170;
-      var advances = window.PROGRESS_ADVANCES || 0;
-
-      frames.forEach(function (src) { var img = new Image(); img.src = src; });
-      if (frames.length) { icon.src = frames[0]; icon.dataset.idx = '0'; }
-
-      function update() {
-        var scrollTop = window.scrollY;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        bar.style.width = Math.min(pct, 100) + '%';
-        if (frames.length) {
-          var stepCount = advances > 0 && docHeight > 0
-            ? Math.floor((scrollTop / docHeight) * advances)
-            : Math.floor(scrollTop / step);
-          var idx = stepCount % frames.length;
-          if (icon.dataset.idx !== String(idx)) { icon.src = frames[idx]; icon.dataset.idx = String(idx); }
-        }
-        ticking = false;
-      }
-      function onScroll() { if (!ticking) { window.requestAnimationFrame(update); ticking = true; } }
-      update();
-      window.addEventListener('scroll', onScroll, { passive: true });
-    })();
 
     /* ── mobile hamburger ── */
     (function () {
@@ -162,32 +150,197 @@
   </script>
 
   <script>
-    /* ── generate 20 member cards ── */
-    var roles = ['Team Lead','Researcher','Designer','Lab Tech','Developer','Bioengineer','Analyst','Coordinator','Writer','Strategist'];
-    var grid = document.getElementById('cardsGrid');
+    /* ── generate the 22-member card carousel ── */
+    var members = [{
+      name: 'Jude',
+      department: 'Software',
+      introduction: 'Hi, I\'m Jude from Software. I love to read, code, and spend time outdoors. Don\'t worry, I never forget to touch grass! Hope you like this wiki!',
+      photo: 'jude-photo.jpg',
+      cardFront: 'member-card-front.png',
+      cardBack: 'jude-card-back.png',
+      cardBackAlt: 'Illustrated frog character card for Jude'
+    }, {
+      name: 'Joshua',
+      department: 'Software',
+      introduction: 'Hey, I am Joshua, a member of the software team. I like to read, write, play video games, and freeload on iGEM work (joking).',
+      photo: 'joshua-photo.jpg',
+      cardFront: 'member-card-front.png',
+      cardBack: 'jude-card-back.png',
+      cardBackAlt: 'Illustrated frog character card back for Joshua'
+    }];
+    var placeholderIndex;
 
-    for (var i = 1; i <= 20; i++) {
+    function formatMemberNumber(number) {
+      return number < 10 ? '0' + number : String(number);
+    }
+
+    for (placeholderIndex = 3; placeholderIndex <= 22; placeholderIndex++) {
+      members.push({
+        name: 'Member ' + formatMemberNumber(placeholderIndex),
+        department: 'Profile coming soon',
+        introduction: 'This teammate\'s card will be revealed soon.'
+      });
+    }
+
+    var grid = document.getElementById('cardsGrid');
+    var nameList = document.getElementById('memberNameList');
+    var memberBrowser = document.getElementById('memberBrowser');
+    var previousButton = document.getElementById('previousMember');
+    var nextButton = document.getElementById('nextMember');
+    var activeMemberName = document.getElementById('activeMemberName');
+    var memberPosition = document.getElementById('memberPosition');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var currentMemberIndex = 0;
+    var cards = [];
+    var nameButtons = [];
+
+    members.forEach(function (member, index) {
+      var i = index + 1;
       var card = document.createElement('div');
       card.className = 'pokecard';
-      card.innerHTML =
-        '<div class="pokecard-inner">' +
-          '<div class="pokecard-back">' +
-            '<div class="pokeball-top"></div>' +
-            '<div class="pokeball-band"></div>' +
-            '<div class="pokeball-circle"></div>' +
-            '<div class="pokeball-dots"></div>' +
-          '</div>' +
-          '<div class="pokecard-front">' +
-            '<div class="card-avatar" style="background:hsl('+ (i * 18) +',65%,55%)">' +
-              '<span>M'+ i +'</span>' +
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', index === 0 ? '0' : '-1');
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-hidden', index === 0 ? 'false' : 'true');
+
+      if (member.photo) {
+        card.className += ' pokecard--profile';
+        if (member.cardBack) {
+          card.className += ' pokecard--custom-back';
+        }
+        card.setAttribute('aria-label', 'Flip ' + member.name + '\'s member card');
+        card.innerHTML =
+          '<div class="pokecard-inner">' +
+            '<div class="pokecard-back">' +
+              (member.cardBack
+                ? '<img class="member-card-art" src="'+ member.cardBack +'" alt="'+ member.cardBackAlt +'" draggable="false">'
+                : '<div class="pokeball-top"></div><div class="pokeball-band"></div><div class="pokeball-circle"></div><div class="pokeball-dots"></div>') +
             '</div>' +
-            '<div class="card-name">Member '+ i +'</div>' +
-            '<div class="card-role">'+ roles[(i-1) % roles.length] +'</div>' +
-            '<div class="card-tagline">Lorem ipsum dolor sit amet</div>' +
-          '</div>' +
-        '</div>';
+            '<div class="pokecard-front">' +
+              '<img class="member-card-art" src="'+ member.cardFront +'" alt="" draggable="false">' +
+              '<div class="member-photo-frame">' +
+                '<img src="'+ member.photo +'" alt="'+ member.name +', '+ member.department +' team member" loading="lazy" decoding="async" draggable="false">' +
+              '</div>' +
+              '<div class="member-profile-copy">' +
+                '<div class="member-profile-name">'+ member.name +'</div>' +
+                '<div class="member-profile-role">'+ member.department +'</div>' +
+                '<p class="member-profile-intro">'+ member.introduction +'</p>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      } else {
+        card.setAttribute('aria-label', 'Flip ' + member.name + '\'s card');
+        card.innerHTML =
+          '<div class="pokecard-inner">' +
+            '<div class="pokecard-back">' +
+              '<div class="pokeball-top"></div>' +
+              '<div class="pokeball-band"></div>' +
+              '<div class="pokeball-circle"></div>' +
+              '<div class="pokeball-dots"></div>' +
+            '</div>' +
+            '<div class="pokecard-front">' +
+              '<div class="card-avatar" style="background:hsl('+ (i * 18) +',65%,55%)">' +
+                '<span>'+ formatMemberNumber(i) +'</span>' +
+              '</div>' +
+              '<div class="card-name">'+ member.name +'</div>' +
+              '<div class="card-role">'+ member.department +'</div>' +
+              '<div class="card-tagline">'+ member.introduction +'</div>' +
+            '</div>' +
+          '</div>';
+      }
+
+      if (index === 0) {
+        card.className += ' is-active';
+      }
+
       grid.appendChild(card);
+      cards.push(card);
+
+      var nameButton = document.createElement('button');
+      nameButton.className = 'member-name-button';
+      nameButton.type = 'button';
+      nameButton.id = 'member-tab-' + index;
+      nameButton.setAttribute('role', 'tab');
+      nameButton.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+      nameButton.setAttribute('aria-controls', 'cardsGrid');
+      nameButton.setAttribute('tabindex', index === 0 ? '0' : '-1');
+      nameButton.textContent = member.name;
+      nameButton.addEventListener('click', function () {
+        showMember(index, index >= currentMemberIndex ? 1 : -1);
+      });
+      nameList.appendChild(nameButton);
+      nameButtons.push(nameButton);
+    });
+
+    function showMember(index, direction) {
+      var nextIndex = (index + members.length) % members.length;
+      var activeCard;
+      var animationClass = direction < 0 ? 'card-enter-previous' : 'card-enter-next';
+
+      if (nextIndex === currentMemberIndex && cards[nextIndex].classList.contains('is-active')) {
+        return;
+      }
+
+      cards.forEach(function (card, cardIndex) {
+        var isActive = cardIndex === nextIndex;
+        card.classList.remove('is-active', 'card-enter-next', 'card-enter-previous', 'flipped');
+        card.style.transform = '';
+        card.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        card.setAttribute('aria-pressed', 'false');
+        card.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
+
+      nameButtons.forEach(function (button, buttonIndex) {
+        var isSelected = buttonIndex === nextIndex;
+        button.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        button.setAttribute('tabindex', isSelected ? '0' : '-1');
+      });
+
+      activeCard = cards[nextIndex];
+      activeCard.classList.add('is-active');
+      if (!reduceMotion) {
+        activeCard.classList.add(animationClass);
+      }
+
+      currentMemberIndex = nextIndex;
+      activeMemberName.textContent = members[nextIndex].name;
+      memberPosition.textContent = (nextIndex + 1) + ' of ' + members.length;
+      nameButtons[nextIndex].scrollIntoView({
+        behavior: reduceMotion ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
+      });
     }
+
+    previousButton.addEventListener('click', function () {
+      showMember(currentMemberIndex - 1, -1);
+    });
+
+    nextButton.addEventListener('click', function () {
+      showMember(currentMemberIndex + 1, 1);
+    });
+
+    memberBrowser.addEventListener('keydown', function (e) {
+      var moveNameFocus = e.target && e.target.getAttribute && e.target.getAttribute('role') === 'tab';
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        showMember(currentMemberIndex - 1, -1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        showMember(currentMemberIndex + 1, 1);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        showMember(0, -1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        showMember(members.length - 1, 1);
+      }
+
+      if (moveNameFocus && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Home' || e.key === 'End')) {
+        nameButtons[currentMemberIndex].focus();
+      }
+    });
 
     /* ── 3D tilt on cursor position (desktop only) ── */
     var hasHover = window.matchMedia('(hover: hover)').matches;
@@ -198,8 +351,8 @@
           var rect = this.getBoundingClientRect();
           var x = e.clientX - rect.left - rect.width / 2;
           var y = e.clientY - rect.top - rect.height / 2;
-          var rX = (y / rect.height) * -22;
-          var rY = (x / rect.width) * 22;
+          var rX = (y / rect.height) * -10;
+          var rY = (x / rect.width) * 10;
           this.style.transform = 'perspective(800px) rotateX('+ rX +'deg) rotateY('+ rY +'deg) scale(1.03)';
         });
 
@@ -208,8 +361,17 @@
         });
       }
 
-      card.addEventListener('click', function () {
-        this.classList.toggle('flipped');
+      function toggleCard() {
+        var isFlipped = this.classList.toggle('flipped');
+        this.setAttribute('aria-pressed', String(isFlipped));
+      }
+
+      card.addEventListener('click', toggleCard);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleCard.call(this);
+        }
       });
     });
   </script>
