@@ -12,6 +12,7 @@ window.NAV_ACCENT_HOVER  = "#f5f5f5";   // accent hover variant
 window.NAV_ACCENT_LIGHT  = "#f5f5f5";   // secondary accent
 window.TITLE_COLOR       = "#f5f5f5";   // logo / title text
 window.NAV_HOVER_BG      = "#f5f5f5";   // link / dropdown toggle hover bg
+window.PROGRESS_COLOR    = window.NAV_BG; // scroll progress bar matches navbar
 
 // Progress icon: 3-frame scroll-driven walk cycle (transparent PNGs)
 window.PROGRESS_ICONS = [
@@ -36,4 +37,5 @@ window.PROGRESS_STEP     = 340;       // fallback: scroll pixels per frame if AD
   root.style.setProperty('--nav-accent-light', window.NAV_ACCENT_LIGHT);
   root.style.setProperty('--nav-title',        window.TITLE_COLOR);
   root.style.setProperty('--nav-hover-bg',     window.NAV_HOVER_BG);
+  root.style.setProperty('--progress-color',   window.PROGRESS_COLOR);
 })();

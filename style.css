@@ -43,12 +43,12 @@ body.members-page {
   left: 0;
   height: 5px;
   width: 0%;
-  background: linear-gradient(90deg, var(--nav-accent), var(--nav-accent-light));
+  background: var(--progress-color, var(--nav-accent));
   transition: width 0.2s ease;
   z-index: 1001;
-  box-shadow: 0 0 10px var(--nav-accent),
-              0 0 20px var(--nav-accent),
-              0 0 40px var(--nav-accent-light);
+  box-shadow: 0 0 10px var(--progress-color, var(--nav-accent)),
+              0 0 20px var(--progress-color, var(--nav-accent)),
+              0 0 40px var(--progress-color, var(--nav-accent));
 }
 
 #progressIcon {
